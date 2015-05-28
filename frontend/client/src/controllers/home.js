@@ -5,8 +5,7 @@ angular.module('app').controller('HomeController', [
 
   function($scope,$http, $interval){
 
-    $scope.sent = [1];
-
-
- 
+    $scope.sent = "WORKS!";
 }
+
+]);
