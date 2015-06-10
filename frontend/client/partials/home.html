@@ -338,9 +338,9 @@ d3.tsv("data.tsv", function(error, data) {
 
             <h1>Data readout:</h1>
 <!--             <div id="graph" ng-if="sent[0] == undefined">Please enter your Bloom username in the field above.</div> -->
-<!--             <div ng-repeat="x in sent">
-               {{x | limitTo:0}}
-             </div> -->
+            <div ng-repeat="x in sent">
+               {{x | limitTo:10}}
+             </div>
             <div id="graph" ng-show="sent[0] == undefined">{{drawGraph(sent)}}</div>
         </div>
     </section>

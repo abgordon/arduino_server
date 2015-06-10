@@ -12,7 +12,7 @@ var serveStatic= require('serve-static');
 fs.realpath(__dirname + '/../', function (err, projectRoot) {
 
     var app = express();
-    app.set('port', 3000);
+    app.set('port', 49152);
     app.set('env', process.env.NODE_ENV || 'development');
 
     app.use(favicon(__dirname + '/favicon.ico'));
