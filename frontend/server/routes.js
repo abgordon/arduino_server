@@ -38,13 +38,14 @@ module.exports = function(app){
   });
 
 
-  app.post('/', function (req, res) {
+  app.post('/postdata', function (req, res) {
   	//super-janky endpoint for writing to DB
+    console.log(Object.keys(req));
   	console.log("writing following data to DB:");
   	console.log(req.body);
   	Sensor_data.create(req.body);
-  	
   });
   
 };
 
+//curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://localhost:3000/api/login
