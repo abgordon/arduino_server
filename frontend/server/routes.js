@@ -38,7 +38,7 @@ module.exports = function(app){
   });
 
 
-  app.post('/postdata', function (req, res) {
+  app.post('/', function (req, res) {
   	//super-janky endpoint for writing to DB
   	console.log("writing following data to DB:");
   	console.log(req.body);
