@@ -1,6 +1,5 @@
 var db        = require('./mongo.js');
 var Sensor_data = db.read_init('wifi_readout');
-// var moment = require('moment');
 
 module.exports = function(app){
 
@@ -40,8 +39,9 @@ module.exports = function(app){
 
   app.post('/postdata', function (req, res) {
   	//super-janky endpoint for writing to DB
-
-	console.log("writing the following:");
+  console.log("\n\n\n\nREQ:\n");
+  console.log(req);
+	console.log("\n\n\n\n\n\nwriting the following:\n");
 	Sensor_data.create(req.body);
 	console.log(req.body);
  });
