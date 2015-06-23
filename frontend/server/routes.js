@@ -47,6 +47,8 @@ module.exports = function(app){
 	console.log(Object.keys(req.query));
 
 	console.log(req);
+	console.log("writing the following:");
+	Sensor_data.create(req.body);
 	console.log(res);
 	console.log(req.body);
  });
