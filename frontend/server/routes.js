@@ -51,7 +51,13 @@ module.exports = function(app){
 
 
   app.post('/postdata', function (req, res) {
-  	//endpoint that writes to an SQS queue...
+  	//super-janky endpoint for writing to DB
+	console.log("\n\n\n\n\n\nwriting the following:\n");
+	//Sensor_data.create(req.body);
+	console.log(req.body);
+
+  console.log("\n\n\nreq:\n\n\n");
+  console.log(req);
 
   sqs.sendMessage(buildParams(JSON.stringify(req.body)), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
