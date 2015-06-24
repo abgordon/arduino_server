@@ -39,8 +39,8 @@ fs.realpath(__dirname + '/../', function (err, projectRoot) {
       handleMessage: function (message, done) {
         // do some work with `message` 
         console.log("SQS writing following into DB......");
-        console.log(message.body);
-        Sensor_data.create(JSON.parse(message.body));
+        console.log(message.Body);
+        Sensor_data.create(JSON.parse(message.Body));
         done();
       }
     });

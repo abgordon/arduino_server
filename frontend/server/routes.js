@@ -1,6 +1,7 @@
 var db           = require('./mongo.js');
 var Sensor_data  = db.read_init('wifi_readout');
 var AWS          = require('aws-sdk');
+var consumer     = require('../consumer.js');
 AWS.config.loadFromPath('./config.json');
 
 module.exports = function(app){
@@ -50,7 +51,7 @@ module.exports = function(app){
 
 
   app.post('/postdata', function (req, res) {
-  	//endpoint that writes to an SQS queue
+  	//endpoint that writes to an SQS queue...
 
   sqs.sendMessage(buildParams(JSON.stringify(req.body)), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
