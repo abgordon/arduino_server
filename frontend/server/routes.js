@@ -52,14 +52,16 @@ module.exports = function(app){
 
   app.post('/postdata', function (req, res) {
   	//super-janky endpoint for writing to DB
-	console.log("\n\n\n\n\n\nwriting the following:\n");
-	//Sensor_data.create(req.body);
-	console.log(req.body);
 
-  console.log("\n\n\nreq:\n\n\n");
-  console.log(req);
+    //incredibly stupid parsing trickery.  You try to hard code POST requests
+    var split = Object.keys(req.body);
+    var split2 = split[0].split(",");
+    var temp_val = split2[0].split(":")[1]
+    var h_val = split2[1].split(":")[1]
 
-  sqs.sendMessage(buildParams(JSON.stringify(req.body)), function(err, data) {
+    var JSON_thing = "{\"username\" : \"abgordon\", \"temp_c\":"+temp_val + ", \"rel_h\":"+h_val
+
+  sqs.sendMessage(buildParams(JSON_thing), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
           else     console.log(data);           // successful response
         });
