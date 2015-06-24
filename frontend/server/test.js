@@ -1,4 +1,4 @@
-//curl -v http://52.26.172.154:49152/postdata -d {"temp_f":"28.40"}
+//curl -v http://52.26.172.154:49152/postdata -d "{temp_f=28.40&relative_humidity=45.40"
 												  temp_f=28.60&relative_humidity=44.00
 
 POST /postdata/ HTTP/1.1

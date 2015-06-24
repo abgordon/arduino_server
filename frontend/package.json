@@ -6,12 +6,13 @@
     "start": "nodemon server/server.js"
   },
   "dependencies": {
+    "sqs-consumer": "*",
+    "aws-sdk": "^2.1.26",
     "angular": "^1.3.11",
     "angular-ui-router": "^0.2.13",
     "body-parser": "~1.10.2",
     "cookie-parser": "~1.3.3",
     "d3": "^3.5.5",
-    "datamaps": "^0.3.6",
     "debug": "~2.1.1",
     "dotenv": "0.5.1",
     "emoji-regex": "^5.0.0",

@@ -8,8 +8,12 @@ var http = require('http');
 var routes = require('./routes');
 var fs = require('fs');
 var serveStatic= require('serve-static');
+var Consumer = require('sqs-consumer');
+var db           = require('./mongo.js');
+var Sensor_data  = db.read_init('wifi_readout');
 
 fs.realpath(__dirname + '/../', function (err, projectRoot) {
+
 
     var app = express();
     app.set('port', 49152);
@@ -30,7 +34,22 @@ fs.realpath(__dirname + '/../', function (err, projectRoot) {
     app.use(serveStatic(projectRoot + '/client/styles'));
 
 
+    var SQS = Consumer.create({
+      queueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints',
+      handleMessage: function (message, done) {
+        // do some work with `message` 
+        console.log("SQS writing following into DB......");
+        console.log(message.body);
+        Sensor_data.create(JSON.parse(message.body));
+        done();
+      }
+    });
 
+    SQS.on('error', function (err) {
+        console.log(err.message);
+    });
+
+    SQS.start();
 
     var server = http.createServer(app);
 

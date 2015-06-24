@@ -1,7 +1,12 @@
-var db        = require('./mongo.js');
-var Sensor_data = db.read_init('wifi_readout');
+var db           = require('./mongo.js');
+var Sensor_data  = db.read_init('wifi_readout');
+var AWS          = require('aws-sdk');
+var consumer     = require('../consumer.js');
+AWS.config.loadFromPath('./config.json');
 
 module.exports = function(app){
+
+
 
 
   app.get('/', function(req,res){
@@ -37,13 +42,32 @@ module.exports = function(app){
   });
 
 
+
+
+
+
+  //create SQS
+  var sqs = new AWS.SQS();
+
+
   app.post('/postdata', function (req, res) {
-  	//super-janky endpoint for writing to DB
-  console.log("\n\n\n\nREQ:\n");
-  console.log(req);
-	console.log("\n\n\n\n\n\nwriting the following:\n");
-	Sensor_data.create(req.body);
-	console.log(req.body);
+  	//endpoint that writes to an SQS queue
+
+  sqs.sendMessage(buildParams(JSON.stringify(req.body)), function(err, data) {
+          if (err) console.log(err, err.stack); // an error occurred
+          else     console.log(data);           // successful response
+        });
+
+  function buildParams(message){
+    return {
+      MessageBody: message, /* required */
+      QueueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints', /* required */
+      DelaySeconds: 0,
+    }
+  };
+
+
+
  });
   
 };
