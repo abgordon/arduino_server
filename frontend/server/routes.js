@@ -1,7 +1,6 @@
 var db           = require('./mongo.js');
 var Sensor_data  = db.read_init('wifi_readout');
 var AWS          = require('aws-sdk');
-var consumer     = require('../consumer.js');
 AWS.config.loadFromPath('./config.json');
 
 module.exports = function(app){
