@@ -20,13 +20,14 @@ fs.realpath(__dirname + '/../', function (err, projectRoot) {
     app.set('env', process.env.NODE_ENV || 'development');
 
     app.use(favicon(__dirname + '/favicon.ico'));
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json());
+
 
     routes(app);
     app.set('views', projectRoot + '/server/views');
     app.set('view engine', 'jade');
 
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
 
     app.use(serveStatic(projectRoot + '/client/src'));
     app.use(serveStatic(projectRoot + '/client/vendor'));
