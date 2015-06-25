@@ -52,8 +52,11 @@ module.exports = function(app){
   app.post('/postdata', function (req, res) {
   	//super-janky endpoint for writing to DB
 
-    //incredibly stupid parsing trickery.  You try to hard code POST requests
-
+    console.log("packet:");
+    console.log(Object.keys(req.body)[0]);
+    var split = Object.keys(req.body)[0].split(":");
+    var temp_val = split[0];
+    var h_val = split[1];
 
     var JSON_string = "{\"username\" : \"abgordon\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
 
