@@ -56,8 +56,8 @@ module.exports = function(app){
     //incredibly stupid parsing trickery.  You try to hard code POST requests
     var split = Object.keys(req.body);
     var split2 = split[0].split(",");
-    var temp_val = split2[0].split(":")[1]
-    var h_val = split2[1].split(":")[1]
+    var temp_val = split2[1].split(":")[1]
+    var h_val = split2[2].split(":")[1]
 
     var JSON_thing = "{\"username\" : \"abgordon\", \"timestamp\": \"" + Date.now() + "\",\"temp_c\":"+temp_val + ", \"rel_h\":"+h_val+"\"}"
 
