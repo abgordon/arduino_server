@@ -59,7 +59,7 @@ module.exports = function(app){
     var temp_val = split2[0].split(":")[1]
     var h_val = split2[1].split(":")[1]
 
-    var JSON_thing = "{\"username\" : \"abgordon\", "\"time\": \"" + Date.now() + "\",\"temp_c\":"+temp_val + ", \"rel_h\":"+h_val+"\"}"
+    var JSON_thing = "{\"username\" : \"abgordon\", \"timestamp\": \"" + Date.now() + "\",\"temp_c\":"+temp_val + ", \"rel_h\":"+h_val+"\"}"
 
   sqs.sendMessage(buildParams(JSON_thing), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred

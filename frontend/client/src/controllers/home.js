@@ -74,7 +74,7 @@ angular.module('app').controller('HomeController', [
 			//convert timestamp to appropriate d3 format
 			data.forEach(function(d){ 
 				var currObj = {}
-				var timestamp= new Date(d.time * 1000);
+				var timestamp= new Date(d.timestamp * 1000);
 				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 				var month = months[timestamp.getMonth()];
 				var date = timestamp.getDate();
@@ -83,7 +83,7 @@ angular.module('app').controller('HomeController', [
 				var formatted_time = date + '-'+ month + '-' + year;
 				var temp_c = (d.temp_c);
 				currObj['date']= parseDate(formatted_time);
-				currObj['temp_c']= +temp_c
+				currObj['temp']= +temp_c
 				tsv_data.push(currObj);
 			});
 
