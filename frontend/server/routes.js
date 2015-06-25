@@ -45,7 +45,6 @@ module.exports = function(app){
 
 
 
-
   //create SQS
   var sqs = new AWS.SQS();
 
@@ -54,14 +53,11 @@ module.exports = function(app){
   	//super-janky endpoint for writing to DB
 
     //incredibly stupid parsing trickery.  You try to hard code POST requests
-    var split = Object.keys(req.body);
-    var split2 = split[0].split(",");
-    var temp_val = split2[1].split(":")[1]
-    var h_val = split2[2].split(":")[1]
 
-    var JSON_thing = "{\"username\" : \"abgordon\", \"timestamp\": \"" + Date.now() + "\",\"temp_c\":"+temp_val + ", \"rel_h\":"+h_val+"\"}"
 
-  sqs.sendMessage(buildParams(JSON_thing), function(err, data) {
+    var JSON_string = "{\"username\" : \"abgordon\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+
+  sqs.sendMessage(buildParams(JSON_string), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
           else     console.log(data);           // successful response
         });

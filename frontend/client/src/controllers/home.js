@@ -30,6 +30,15 @@ angular.module('app').controller('HomeController', [
     }
 
 
+
+	
+	$scope.resetForm = function(){
+		$scope.sent=[0];
+		$scope.check_data=[];
+		$( "#graph" ).empty();
+		//d3.select("#graph").remove()
+	}
+
     //sample time converter
 	// function timeConverter(UNIX_timestamp){
 	//   var a = new Date(UNIX_timestamp*1000);
@@ -46,13 +55,6 @@ angular.module('app').controller('HomeController', [
 	//   return time;
 	// }
 
-	
-	$scope.resetForm = function(){
-		$scope.sent=[0];
-		$scope.check_data=[];
-		$( "#graph" ).empty();
-		//d3.select("#graph").remove()
-	}
 
 	$scope.drawGraph = function(sent){
 		var data = sent.data;
@@ -72,7 +74,7 @@ angular.module('app').controller('HomeController', [
 
 
 			//convert timestamp to appropriate d3 format
-			data.forEach(function(d){ 
+			data.forEach(function(d){ 				
 				var currObj = {}
 				var timestamp= new Date(d.timestamp * 1000);
 				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -83,11 +85,11 @@ angular.module('app').controller('HomeController', [
 				var formatted_time = date + '-'+ month + '-' + year;
 				var temp_c = (d.temp_c);
 				currObj['date']= parseDate(formatted_time);
-				currObj['temp']= +temp_c
+				currObj['temp']= (+temp_c)*1.8 + 32
 				tsv_data.push(currObj);
 			});
 
-
+				
 			//set bounds
 			var margin = {top: 20, right: 20, bottom: 30, left: 50},
 			    width = 960 - margin.left - margin.right,
