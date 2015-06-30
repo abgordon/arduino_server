@@ -139,7 +139,7 @@ angular.module('app').controller('HomeController', [
 				tsv_data.forEach(function(d){
 
 						  x.domain(d3.extent(tsv_data, function(d) { return d.date; }));
-						  y.domain(d3.extent([50,100]));
+						  y.domain(d3.extent([0,100]));
 						  x.domain += 10; // incredibly stupid fix; this crashes a graph draw so it only goes once
 						  svg.append("g")
 						      .attr("class", "x axis")
@@ -161,10 +161,10 @@ angular.module('app').controller('HomeController', [
 						      .attr("class", "line")
 						      .attr("d", t_line);
 
-						  // svg.append("path")
-						  //     .datum(tsv_data)
-						  //     .attr("class", "line")
-						  //     .attr("d", h_line);
+						  svg.append("path")
+						      .datum(tsv_data)
+						      .attr("class", "line")
+						      .attr("d", h_line);
 			//end forEach()
 				});
 		
