@@ -17,11 +17,32 @@
   display: none;
 }
 
-.line {
+.t_line {
+  fill: none;
+  stroke: firebrick;
+  stroke-width: 5px;
+}
+.d_line {
   fill: none;
   stroke: steelblue;
-  stroke-width: 1px;
+  stroke-width: 3px;
 }
+.h_line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 5px;
+}
+
+.rule {
+    height: 90%;
+    position: absolute;
+    border-right: 1px dotted #000;
+    text-align: right;
+}
+span {
+    margin-right: 0.5em;
+}
+
 
 
 </style>
@@ -48,13 +69,15 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/creative.css" type="text/css">
-
+    <link rel='stylesheet' href='build/loading-bar.min.css' type='text/css' media='all' />
+    <script type='text/javascript' src='build/loading-bar.min.js'></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="tooltip.js"></script>
 
 </head>
 
@@ -161,7 +184,7 @@
             <div class="row no-gutter">
                 <div class="col-lg-4 col-sm-6">
                     <a href="#" class="portfolio-box">
-                        <img src="img/hyg2.jpg" class="img-responsive" alt="">
+                        <img src="img/hyg2.jpg" class="img-responsive" style="width:100%;" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
        <!--                          <div class="project-category text-faded">
@@ -176,7 +199,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <a href="#" class="portfolio-box">
-                        <img src="img/integrated.JPG" class="img-responsive" alt="">
+                        <img src="img/integrated.JPG" class="img-responsive" style="width:100%;" alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
              <!--                    <div class="project-category text-faded">
@@ -191,7 +214,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <a href="#" class="portfolio-box">
-                        <img src="img/wireless.JPG" class="img-responsive" alt="">
+                        <img src="img/wireless.JPG" class="img-responsive" style="width:100%;"  alt="">
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
           <!--                       <div class="project-category text-faded">

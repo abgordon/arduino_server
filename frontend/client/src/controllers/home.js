@@ -8,15 +8,7 @@ angular.module('app').controller('HomeController', [
     $scope.sent = [0];
     $scope.check_temp_data = []
     $scope.check_humidity_data = []
-    // $scope.query = function(){
-    // 	$http({
-    // 		method: 'GET',
-    // 		url: '/getinfo',
-    // 		params: {}
-    // 	}).then(function(data_readout){
-    // 		$scope.sent = data_readout;
-    // 	})
-    // }
+
 
 
     $scope.query = function(){
@@ -30,6 +22,19 @@ angular.module('app').controller('HomeController', [
     	})
     }
 
+    $scope.getWidth = function(){
+	  if (self.innerHeight) {
+	    return self.innerWidth;
+	  }
+
+	  if (document.documentElement && document.documentElement.clientHeight) {
+	    return document.documentElement.clientWidth;
+	  }
+
+	  if (document.body) {
+	    return document.body.clientWidth;
+	  }
+	}
 
 
 	
@@ -37,24 +42,8 @@ angular.module('app').controller('HomeController', [
 		$scope.sent=[0];
 		$scope.check_data=[];
 		$( "#graph" ).empty();
-		//d3.select("#graph").remove()
 	}
 
-    //sample time converter
-	// function timeConverter(UNIX_timestamp){
-	//   var a = new Date(UNIX_timestamp*1000);
-	//   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-	//   var year = a.getFullYear()-2000;
-	//   var month = months[a.getMonth()];
-	//   var date = a.getDate();
-	//   var hour = a.getHours();
-	//   var min = a.getMinutes();
-	//   var sec = a.getSeconds();
-	//   var afternoon = "AM"
-	//   if (hour > 12){hour -= 12;afternoon = "PM"}
-	//   var time =  date+ '-' + month + '-' + year;
-	//   return time;
-	// }
 
 
 	$scope.drawTempGraph = function(sent){
@@ -92,6 +81,22 @@ angular.module('app').controller('HomeController', [
 				currObj['date']= parseDate(formatted_time);
 				currObj['temp']= temp_f;
 				currObj['rel_h'] = h;
+
+				AM_PM = "AM"
+				if (hour > 12){
+					hour-= 12;
+					AM_PM = "PM"
+				}
+				if (sec < 10){
+					sec = "0" + sec;
+				}
+
+				var monthNum = {'Jan':'01', 'Feb':02,'Mar':03,'Apr':04,'May':05,'Jun':06,'Jul':07,'Aug':08,'Sep':09,'Oct':10,'Nov':11,'Dec':12}
+				currObj['date_unparsed'] = date + '-'+ monthNum[month] + '-' + year + ', ' + hour + ':' + min + ':' + sec + " " + AM_PM;
+				
+
+				var Td = temp_f - ((100 - h)/5)
+				currObj["dew_point"] = Td
 				tsv_data.push(currObj);
 			});
 
@@ -127,12 +132,61 @@ angular.module('app').controller('HomeController', [
 			    .y(function(d) { return y(d.temp* d.rel_h); })
 			    .interpolate("basis");
 
+			var dew_line = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+			    .y(function(d) { return y(d.dew_point); })
+			    .interpolate("basis");
+
+
+
+
+			var tip = d3.tip()
+			  .attr('class', 'd3-tip')
+			  .attr('r', 50)
+			  .offset([0, 0])
+			  .html(function(d) {
+
+				var coordinates = [0, 0];
+				coordinates = d3.mouse(this);
+				var x = coordinates[0];
+
+				var r = d.length/width
+				var i = Math.round( x*r );
+
+				//barely working rule
+				// d3.select('#graph').on('mousemove', function() {
+				// 	var xpos = d3.event.pageX
+				// 	var rule = d3.select('#graph').selectAll('div.rule').data([0]);
+				// 	rule.enter().append('div')
+				// 		.attr('class', 'rule')
+				// 		.append('span');
+				// 	rule.style('left', xpos + 'px');
+				// 	rule.select('span').text(xpos);
+				// 						});				
+
+			    return "Date: <span style='color:black'>" + d[i].date_unparsed + "<br></span>\n"
+			    		+ "Temp: <span style='color:black'>" + d[i].temp + "˚ F  <br></span>"
+			    		+ "Rel. H: <span style='color:black'>" + (d[i].rel_h)*100 + "%" + "<br></span>"
+			    		+ "Dew Point: <span style='color:black'>" + d[i].dew_point + "˚ F</span><br>";
+
+			  })
+			
+
 			var svg = d3.select("#graph").append("svg")
 			    .attr("width", width + margin.left + margin.right)
 			    .attr("height", height + margin.top + margin.bottom)
 			  .append("g")
-			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+
+
+			svg.call(tip);
+
+
+			
+
+			$scope.check_temp_data = data;
+			}
 
 			//draw graph
 			console.log("attempting to write from TSV....")
@@ -158,18 +212,30 @@ angular.module('app').controller('HomeController', [
 
 						  svg.append("path")
 						      .datum(tsv_data)
-						      .attr("class", "line")
-						      .attr("d", t_line);
+						      .attr("class", "t_line")
+						      .attr("d", t_line)
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
 
 						  svg.append("path")
 						      .datum(tsv_data)
-						      .attr("class", "line")
-						      .attr("d", h_line);
+						      .attr("class", "h_line")
+						      .attr("d", h_line)
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
+
+      					  svg.append("path")
+						      .datum(tsv_data)
+						      .attr("class", "d_line")
+						      .attr("d", dew_line)
+						      .style("stroke-dasharray", ("3, 3")) 
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
+
+							
 			//end forEach()
 				});
-		
-			$scope.check_temp_data = data;
-			}
+
  		
 	//end drawGraph(data)
 	}

@@ -34,7 +34,7 @@ fs.realpath(__dirname + '/../', function (err, projectRoot) {
     app.use(serveStatic(projectRoot + '/client/vendor'));
     app.use(serveStatic(projectRoot + '/client/partials'));
     app.use(serveStatic(projectRoot + '/client/styles'));
-
+    app.use(serveStatic(projectRoot + '/server/tooltip.js'))
 
     var SQS = Consumer.create({
       queueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints',
