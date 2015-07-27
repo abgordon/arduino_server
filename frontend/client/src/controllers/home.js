@@ -153,14 +153,14 @@ angular.module('app').controller('HomeController', [
 				var r = d.length/width
 				var i = Math.round( x*r );
 
-				//barely working rule
+				//barely working rule, this breaks the tooltip tho
 				// d3.select('#graph').on('mousemove', function() {
 				// 	var xpos = d3.event.pageX
 				// 	var rule = d3.select('#graph').selectAll('div.rule').data([0]);
-				// 	rule.enter().append('div')
+				// 	rule.enter().append('svg')
 				// 		.attr('class', 'rule')
 				// 		.append('span');
-				// 	rule.style('left', xpos + 'px');
+				// 	rule.style('left', (xpos-300) + 'px');
 				// 	rule.select('span').text(xpos);
 				// 						});				
 
