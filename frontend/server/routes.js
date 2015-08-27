@@ -55,10 +55,13 @@ module.exports = function(app){
     console.log("packet:");
     console.log(Object.keys(req.body)[0]);
     var split = Object.keys(req.body)[0].split(":");
-    var temp_val = split[0];
-    var h_val = split[1];
+    
+    var username = split[0]
+    var temp_val = split[1];
+    var h_val = split[2];
+    var co2_val = split[3];
 
-    var JSON_string = "{\"username\" : \"new_user2\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+    var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
 
   sqs.sendMessage(buildParams(JSON_string), function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
