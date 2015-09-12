@@ -297,12 +297,14 @@ span {
                 <button type="button" ng-click="resetForm()">Reset</button>
             </form>
 
+
             <h1>Data readout:</h1>
 <!--             <div id="graph" ng-if="sent[0] == undefined">Please enter your Bloom username in the field above.</div> -->
 <!--             <div ng-repeat="x in sent">
                {{x | limitTo:10}}
              </div> -->
-            <div id="graph" ng-show="sent[0] == undefined">{{drawTempGraph(sent)}}</div>
+            <div id="graphTemp" ng-show="sent[0] == undefined">{{drawTempGraph(sent)}}</div>
+            <div id="graphco2" ng-show="sent[0] == undefined">{{drawCO2Graph(sent)}}</div>
 <!--             <div id="graph" ng-show="sent[0] == undefined">{{drawHumidityGraph(sent)}}</div> -->
         </div>
     </section>

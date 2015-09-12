@@ -7,7 +7,7 @@ angular.module('app').controller('HomeController', [
 
     $scope.sent = [0];
     $scope.check_temp_data = []
-    $scope.check_humidity_data = []
+    $scope.check_co2_data = []
 
 
 
@@ -41,20 +41,25 @@ angular.module('app').controller('HomeController', [
 	$scope.resetForm = function(){
 		$scope.sent=[0];
 		$scope.check_data=[];
-		$( "#graph" ).empty();
+		$( "#graphTemp" ).empty();
+		$( "#graphco2" ).empty();
 	}
 
 
 
+	//TODO: instead of adding logic to create additional lines here by inference off data points, 
+	//	add those lines in the producer.  Then we can simply send in an array of values we want to get off a timestamp
+	// 	In this way we can make all graph functions generic
+	//	in the meantime, we will have unique graph drawing functions.... (nice WET code)
 	$scope.drawTempGraph = function(sent){
 		var data = sent.data;
-		var sorted = sent
 		var tsv_data = []
 		console.log("initializing graph with " + data.length + " data points.....");
 		if (sent.data.length == 0){console.log("No user found!");return;}
+
 		else if ($scope.check_temp_data == data){console.log("stopping propogation...");return;}
 		else {
-			$( "#graph" ).empty();
+			$( "#graphTemp" ).empty();
 			
 
 
@@ -172,7 +177,7 @@ angular.module('app').controller('HomeController', [
 			  })
 			
 
-			var svg = d3.select("#graph").append("svg")
+			var svg = d3.select("#graphTemp").append("svg")
 			    .attr("width", width + margin.left + margin.right)
 			    .attr("height", height + margin.top + margin.bottom)
 			  .append("g")
@@ -238,6 +243,171 @@ angular.module('app').controller('HomeController', [
 
  		
 	//end drawGraph(data)
+	}
+
+
+
+	$scope.drawCO2Graph = function(sent) {
+		var data = sent.data;
+		var tsv_data = []
+		console.log("initializing graph with " + data.length + " data points.....");
+		if (sent.data.length == 0){console.log("No user found!");return;}
+		else if ($scope.check_co2_data  == data){console.log("stopping propogation...");return;}
+		else {
+			$( "#graphco2" ).empty();
+			
+
+
+
+			//create d3 date parser
+			var parseDate = d3.time.format("%d-%b-%y-%I-%M-%S").parse;
+
+
+			//convert timestamp to appropriate d3 format
+			data.forEach(function(d){ 				
+				var currObj = {}
+				var timestamp= new Date(d.timestamp * 1000);
+				var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+				var month = months[timestamp.getMonth()];
+				var date = timestamp.getDate();
+				var year = timestamp.getFullYear()-2000;
+			    var hour = timestamp.getHours();
+			    var min = timestamp.getMinutes();
+			    var sec = timestamp.getSeconds();
+				var formatted_time = date + '-'+ month + '-' + year + '-' + hour + '-' + min + '-' + sec;
+				currObj['date']= parseDate(formatted_time);
+				currObj['co2']= d.co2;
+
+				AM_PM = "AM"
+				if (hour > 12){
+					hour-= 12;
+					AM_PM = "PM"
+				}
+				if (sec < 10){
+					sec = "0" + sec;
+				}
+
+				var monthNum = {'Jan':'01', 'Feb':02,'Mar':03,'Apr':04,'May':05,'Jun':06,'Jul':07,'Aug':08,'Sep':09,'Oct':10,'Nov':11,'Dec':12}
+				currObj['date_unparsed'] = date + '-'+ monthNum[month] + '-' + year + ', ' + hour + ':' + min + ':' + sec + " " + AM_PM;
+				
+				tsv_data.push(currObj);
+			});
+
+				
+			//set bounds
+			var margin = {top: 20, right: 20, bottom: 30, left: 50},
+			    width = 960 - margin.left - margin.right,
+			    height = 500 - margin.top - margin.bottom;
+
+			var x = d3.time.scale()
+			    .range([0, width]);
+
+			var y = d3.scale.linear()
+				.domain([0,100])
+			    .range([height, 0]);
+
+			var xAxis = d3.svg.axis()
+			    .scale(x)
+			    .orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(y)
+			    .orient("left")
+
+
+			var t_line = d3.svg.line()
+			    .x(function(d) { return x(d.date); })
+			    .y(function(d) { return y(d.co2); })
+			    .interpolate("basis");
+
+
+
+
+
+			var tip = d3.tip()
+			  .attr('class', 'd3-tip')
+			  .attr('r', 50)
+			  .offset([0, 0])
+			  .html(function(d) {
+
+				var coordinates = [0, 0];
+				coordinates = d3.mouse(this);
+				var x = coordinates[0];
+
+				var r = d.length/width
+				var i = Math.round( x*r );
+		
+
+			    return "Date: <span style='color:black'>" + d[i].date_unparsed + "<br></span>\n"
+			    		+ "Temp: <span style='color:black'>" + d[i].co2 + "ppm F  <br></span>";
+			    		
+
+			  })
+			
+
+			var svg = d3.select("#graphco2").append("svg")
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+
+
+			svg.call(tip);
+
+
+			
+
+			$scope.check_co2_data = data;
+			}
+
+			//draw graph
+			console.log("attempting to write from TSV....")
+				tsv_data.forEach(function(d){
+
+						  x.domain(d3.extent(tsv_data, function(d) { return d.date; }));
+						  y.domain([0, d3.max(data, function(d) { return d.co2; })]);
+						  x.domain += 10; // incredibly stupid fix; this crashes a graph draw so it only goes once
+						  svg.append("g")
+						      .attr("class", "x axis")
+						      .attr("transform", "translate(0," + height + ")")
+						      .call(xAxis);
+
+						  svg.append("g")
+						      .attr("class", "y axis")
+						      .call(yAxis)
+						    .append("text")
+						      .attr("transform", "rotate(-90)")
+						      .attr("y", 6)
+						      .attr("dy", ".71em")
+						      .style("text-anchor", "end")
+						      .text("CO2 ppm");
+
+						  svg.append("path")
+						      .datum(tsv_data)
+						      .attr("class", "t_line")
+						      .attr("d", t_line)
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
+
+						  svg.append("path")
+						      .datum(tsv_data)
+						      .attr("class", "h_line")
+						      .attr("d", h_line)
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
+
+      					  svg.append("path")
+						      .datum(tsv_data)
+						      .attr("class", "d_line")
+						      .attr("d", dew_line)
+						      .style("stroke-dasharray", ("3, 3")) 
+						      .on('mousemove', tip.show)
+						      .on('mouseout', tip.hide)
+
+							
+			//end forEach()
+				});	
 	}
 
 

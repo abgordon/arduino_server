@@ -11,6 +11,7 @@ var serveStatic= require('serve-static');
 var Consumer = require('sqs-consumer');
 var db           = require('./mongo.js');
 var Sensor_data  = db.read_init('wifi_readout');
+var producer     = require('../producer.js')
 
 fs.realpath(__dirname + '/../', function (err, projectRoot) {
 

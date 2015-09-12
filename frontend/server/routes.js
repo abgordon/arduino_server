@@ -46,11 +46,11 @@ module.exports = function(app){
 
 
   //create SQS
-  var sqs = new AWS.SQS();
+  //var sqs = new AWS.SQS();
 
-
+  //SQS receive message failed: Inaccessible host: `sqs.us-west-2.amazonaws.com'. This service may not be available in the `us-west-2' region.
+  //  -> DUFQ?
   app.post('/postdata', function (req, res) {
-  	//super-janky endpoint for writing to DB
 
     console.log("packet:");
     console.log(Object.keys(req.body)[0]);
@@ -81,5 +81,6 @@ module.exports = function(app){
  });
   
 };
+//basement_co2basement_co2%3A%3A28.5028.50%3A%3A38.4038.40%3A%3A451451
 
 //curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://localhost:3000/api/login
