@@ -44,9 +44,10 @@ module.exports = function(app){
 
 
   /*
-    using 3rd party sqs library here. Standard sqs causes ERRCONNRESET for some reason...
+    using 3rd party sqs library here.
   */
   app.post('/postdata', function (req, res) {
+    console.log(req)
 
     console.log("packet:");
     console.log(Object.keys(req.body)[0]);
