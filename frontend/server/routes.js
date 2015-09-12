@@ -2,7 +2,12 @@ var db           = require('./mongo.js');
 var Sensor_data  = db.read_init('wifi_readout');
 var AWS          = require('aws-sdk');
 var consumer     = require('../consumer.js');
+var Producer = require('sqs-producer');
 AWS.config.loadFromPath('./config.json');
+var producer = Producer.create({
+  queueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints',
+  region: 'us-west-2'
+});
 
 module.exports = function(app){
 
@@ -63,18 +68,25 @@ module.exports = function(app){
 
     var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
 
-  sqs.sendMessage(buildParams(JSON_string), function(err, data) {
-          if (err) console.log(err, err.stack); // an error occurred
-          else     console.log(data);           // successful response
-        });
 
-  function buildParams(message){
-    return {
-      MessageBody: message, /* required */
-      QueueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints', /* required */
-      DelaySeconds: 0,
-    }
-  };
+    producer.send([{
+    body: JSON_string
+    }], function(err) {
+      if (err) console.log(err);
+    });
+
+  // sqs.sendMessage(buildParams(JSON_string), function(err, data) {
+  //         if (err) console.log(err, err.stack); // an error occurred
+  //         else     console.log(data);           // successful response
+  //       });
+
+  // function buildParams(message){
+  //   return {
+  //     MessageBody: message, /* required */
+  //     QueueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints', /* required */
+  //     DelaySeconds: 0,
+  //   }
+  // };
 
 
 
