@@ -70,7 +70,7 @@ module.exports = function(app){
 
 
     producer.send([{
-    id: JSON_string,
+    id: "id1",
     body: JSON_string
     }], function(err) {
       if (err) console.log(err);
