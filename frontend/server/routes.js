@@ -39,22 +39,13 @@ module.exports = function(app){
         res.status(200).send(data);
       })
 
-      // Sensor_data.find( {"username":req.query.user} ).find(function(err, data){
-      //   if(err) throw err;
-      //   res.status(200).send(data)
-      // });
     }
   });
 
 
-
-
-
-  //create SQS
-  //var sqs = new AWS.SQS();
-
-  //SQS receive message failed: Inaccessible host: `sqs.us-west-2.amazonaws.com'. This service may not be available in the `us-west-2' region.
-  //  -> DUFQ?
+  /*
+    using 3rd party sqs library here. Standard sqs causes ERRCONNRESET for some reason...
+  */
   app.post('/postdata', function (req, res) {
 
     console.log("packet:");
@@ -64,32 +55,24 @@ module.exports = function(app){
     var username = split[0]
     var temp_val = split[1];
     var h_val = split[2];
-    var co2_val = split[3];
+    if (+split[3] == -1){
+      console.log("reading ambient co2...")
+      var co2_val = 400;
+    }else {
+      var co2_val = split[3];
+    }
+    
+
 
     var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
 
-
+    //using
     producer.send([{
     id: "id1",
     body: JSON_string
     }], function(err) {
       if (err) console.log(err);
     });
-
-  // sqs.sendMessage(buildParams(JSON_string), function(err, data) {
-  //         if (err) console.log(err, err.stack); // an error occurred
-  //         else     console.log(data);           // successful response
-  //       });
-
-  // function buildParams(message){
-  //   return {
-  //     MessageBody: message, /* required */
-  //     QueueUrl: 'https://sqs.us-west-2.amazonaws.com/282218789794/arduino_datapoints', /* required */
-  //     DelaySeconds: 0,
-  //   }
-  // };
-
-
 
  });
   
