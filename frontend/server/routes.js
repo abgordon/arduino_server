@@ -70,11 +70,11 @@ module.exports = function(app){
 
 
     producer.send([{
-
-    producer.send(JSON_string, function(err) {
+    id: JSON_string,
+    body: JSON_string
+    }], function(err) {
       if (err) console.log(err);
     });
-
 
   // sqs.sendMessage(buildParams(JSON_string), function(err, data) {
   //         if (err) console.log(err, err.stack); // an error occurred
