@@ -54,24 +54,26 @@ module.exports = function(app){
     switch(split[0]){
       case "1":
           console.log("case 1");
-          var username = split[1];
-          var device_id = split[2];
-          var temp_val = split[3];
-          var h_val = split[4];
+          // var username = split[1];
+          var username = "mg"
+          // var device_id = split[2];
+          var device_id = "1"
+          var temp_val = split[1];
+          var h_val = split[2];
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"device_id\":\""+device_id+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
-          break
       case "2":
           console.log("case 2");
-          var username = split[1];
-          var device_id = split[2];
-          if (+split[3] == -1){
+          // var username = split[1];
+          var username = "mg"
+          // var device_id = split[2];
+          var device_id = "1"
+          if (+split[1] == -1){
             console.log("reading ambient co2...")
             var co2_val = 400;
           }else {
             var co2_val = split[3];
           }
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"device_id\":\""+device_id + "\"}"
-          break
     }
 
     producer.send([{
