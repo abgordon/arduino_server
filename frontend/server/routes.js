@@ -47,14 +47,13 @@ module.exports = function(app){
     using 3rd party sqs library here.
   */
   app.post('/postdata', function (req, res) {
-    console.log(req)
-
     console.log("packet:");
     console.log(Object.keys(req.body)[0]);
     var split = Object.keys(req.body)[0].split(":");
 
     switch(split[0]){
       case "1":
+          console.log("case 1");
           var username = split[1];
           var device_id = split[2];
           var temp_val = split[3];
@@ -62,6 +61,7 @@ module.exports = function(app){
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"device_id\":\""+device_id+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
           break
       case "2":
+          console.log("case 2");
           var username = split[1];
           var device_id = split[2];
           if (+split[3] == -1){
