@@ -52,22 +52,28 @@ module.exports = function(app){
     console.log("packet:");
     console.log(Object.keys(req.body)[0]);
     var split = Object.keys(req.body)[0].split(":");
-    
-    var username = split[0]
-    var temp_val = split[1];
-    var h_val = split[2];
-    if (+split[3] == -1){
-      console.log("reading ambient co2...")
-      var co2_val = 400;
-    }else {
-      var co2_val = split[3];
+
+    switch(split[0]){
+      case "1":
+          var username = split[1];
+          var device_id = split[2];
+          var temp_val = split[3];
+          var h_val = split[4];
+          var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"device_id\":\""+device_id+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+          break
+      case "2":
+          var username = split[1];
+          var device_id = split[2];
+          if (+split[3] == -1){
+            console.log("reading ambient co2...")
+            var co2_val = 400;
+          }else {
+            var co2_val = split[3];
+          }
+          var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"device_id\":\""+device_id + "\"}"
+          break
     }
-    
 
-
-    var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
-
-    //using
     producer.send([{
     id: "id1",
     body: JSON_string
