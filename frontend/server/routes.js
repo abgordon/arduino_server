@@ -61,6 +61,7 @@ module.exports = function(app){
           var temp_val = split[1];
           var h_val = split[2];
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"device_id\":\""+device_id+ "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+          break
       case "2":
           console.log("case 2");
           // var username = split[1];
@@ -74,6 +75,7 @@ module.exports = function(app){
             var co2_val = split[3];
           }
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"device_id\":\""+device_id + "\"}"
+          break
     }
 
     producer.send([{

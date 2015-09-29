@@ -315,7 +315,7 @@ angular.module('app').controller('HomeController', [
 			    .orient("left")
 
 
-			var t_line = d3.svg.line()
+			var co2_line = d3.svg.line()
 			    .x(function(d) { return x(d.date); })
 			    .y(function(d) { return y(d.co2); })
 			    .interpolate("basis");
@@ -386,24 +386,11 @@ angular.module('app').controller('HomeController', [
 						  svg.append("path")
 						      .datum(tsv_data)
 						      .attr("class", "t_line")
-						      .attr("d", t_line)
+						      .attr("d", co2_line)
 						      .on('mousemove', tip.show)
 						      .on('mouseout', tip.hide)
 
-						  svg.append("path")
-						      .datum(tsv_data)
-						      .attr("class", "h_line")
-						      .attr("d", h_line)
-						      .on('mousemove', tip.show)
-						      .on('mouseout', tip.hide)
 
-      					  svg.append("path")
-						      .datum(tsv_data)
-						      .attr("class", "d_line")
-						      .attr("d", dew_line)
-						      .style("stroke-dasharray", ("3, 3")) 
-						      .on('mousemove', tip.show)
-						      .on('mouseout', tip.hide)
 
 							
 			//end forEach()
