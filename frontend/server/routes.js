@@ -51,6 +51,9 @@ module.exports = function(app){
     console.log(Object.keys(req.body)[0]);
     var split = Object.keys(req.body)[0].split(":");
 
+    var JSON_string = "{\"username\" : \"new_user\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+
+    /*   for get all this shit for now.....
     switch(split[0]){
       case "1":
           console.log("case 1");
@@ -76,7 +79,7 @@ module.exports = function(app){
           }
           var JSON_string = "{\"username\" : \""+username +"\", \"timestamp\": \"" + Date.now()/1000 + "\",\"co2\":\""+co2_val+ "\",\"device_id\":\""+device_id + "\"}"
           break
-    }
+    } */
 
     producer.send([{
     id: "id1",
