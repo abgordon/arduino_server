@@ -51,7 +51,7 @@ module.exports = function(app){
     console.log(Object.keys(req.body)[0]);
     var split = Object.keys(req.body)[0].split(":");
 
-    var JSON_string = "{\"username\" : \"new_user\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+temp_val + "\", \"rel_h\":\""+h_val+"\"}"
+    var JSON_string = "{\"username\" : \"new_user\", \"timestamp\": \"" + Date.now()/1000 + "\",\"temp_c\":\""+spl[0] + "\", \"rel_h\":\""+spl[1]+"\"}"
 
     /*   for get all this shit for now.....
     switch(split[0]){
